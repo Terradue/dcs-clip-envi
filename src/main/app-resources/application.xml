@@ -4,7 +4,7 @@
     <jobTemplate id="clip">
       <streamingExecutable>/application/clip/run.sh</streamingExecutable>
       <defaultParameters>
-              <parameter scope="runtime" id="bbox" title="Bounding box for clipping" abstract="Bounding box in xmin,ymin,xmax,ymax EPSG:4326"></parameter>
+              <parameter scope="runtime" id="bbox" title="Bounding box for clipping" abstract="Bounding box in xmin,ymin,xmax,ymax EPSG:4326">86.99,41.70,90.42,43.67</parameter>
       </defaultParameters>
       <defaultJobconf>
         <property id="mapred.task.timeout">9900000000</property>

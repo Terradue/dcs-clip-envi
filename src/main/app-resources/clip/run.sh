@@ -9,6 +9,7 @@ ERR_NOINPUT=1
 ERR_WRONGPROD=4
 ERR_EOLI=5
 ERR_NOEOLIRES=6
+ERR_ENVIVIEW=10
 
 # add a trap to exit gracefully
 function cleanExit ()
@@ -39,7 +40,7 @@ while read dataset
 do
   ciop-log "INFO" "Retrieve $dataset"
 
-  retrieved="`opensearch-client "$inputfile" enclosure | ciop-copy -o $TMPDIR -`"
+  retrieved="`opensearch-client "$dataset" enclosure | ciop-copy -o $TMPDIR -`"
 
   # check if the file was retrieved
   [ "$?" == "0" -a -e "$retrieved" ] || exit $ERR_NOINPUT  
@@ -60,8 +61,14 @@ do
 
   [ "$results" == "0" ] && exit $ERR_NOEOLIRES 
 
-  clipstart="`tail -n 1 $eoli | awk 'BEGIN { FS = "|" }; { print $6}'`"
-  clipstop="`tail -n 1 $eoli | awk 'BEGIN { FS = "|" }; { print $7}'`"
+  clipstart="`tail -n 1 $eoli | awk 'BEGIN { FS = "|" }; { print $6}' | tr -d "Z" | xargs -I {} date -d {} "+%d-%b-%Y %H:%m:%S" | tr "a-z" "A-Z"`"
+  clipstop="`tail -n 1 $eoli | awk 'BEGIN { FS = "|" }; { print $7}' | tr -d "Z" | xargs -I {} date -d {} "+%d-%b-%Y %H:%m:%S" | tr "a-z" "A-Z"`"
   
+  java -c /application/clip/lib/EnviView.jar envisat.cli.PdsSubset -out $TMPDIR -starttime $clipstart -stoptime $clipstop $retrieved
 
+  [ "$?" != "0" ] && exit $ERR_ENVIVIEW
+
+  rm -fr $retrieved
+ 
+  ciop-publish -m $TMPDIR/ASA_IM*
 done

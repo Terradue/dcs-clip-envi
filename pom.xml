@@ -151,7 +151,6 @@
 					<execution>
 						<id>github-upload</id>
 						<phase>deploy</phase>
-:1
 						<goals>
 							<goal>release</goal>
 						</goals>
