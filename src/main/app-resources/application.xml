@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="clip">
+  <jobTemplates>
+    <jobTemplate id="clip">
+      <streamingExecutable>/application/clip/run.sh</streamingExecutable>
+      <defaultParameters>
+              <parameter scope="runtime" id="bbox" title="Bounding box for clipping" abstract="Bounding box in xmin,ymin,xmax,ymax EPSG:4326"></parameter>
+      </defaultParameters>
+      <defaultJobconf>
+        <property id="mapred.task.timeout">9900000000</property>
+      </defaultJobconf>
+    </jobTemplate>
+  </jobTemplates>
+  <workflow id="clip_wf" title="Clip Envisat ASAR Image Mode products" abstract="This application clipes Envisat ASAR Image Mode products">
+    <workflowVersion>1.0</workflowVersion>
+    <node id="node_clip">
+      <job id="clip" />
+      <sources>
+        <source scope="runtime" id="ref" title="Envisat ASAR dataset reference" abstract="Reference to dataset reference as catalogue entry" refid="string:list">http://eo-virtual-archive4.esa.int/search/ASA_IM__0P/ASA_IM__0CNPDE20090504_154801_000001202078_00398_37526_2063.N1/rdf</source>
+      </sources>
+      <parameters/>
+    </node>
+  </workflow>
+</application>
+
